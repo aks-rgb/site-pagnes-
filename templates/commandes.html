@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Commandes - ANTOU & Guiny</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #f5f5f5; }
+        header {
+            background: #7b2c00;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 10%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo { color: white; font-size: 24px; font-weight: 700; }
+        .logo i { margin-right: 10px; }
+        nav a { color: white; text-decoration: none; margin-left: 25px; transition: 0.3s; }
+        nav a:hover { color: orange; }
+        .cart-count {
+            background: #e74c3c;
+            border-radius: 50%;
+            padding: 2px 8px;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        .page-title {
+            font-size: 32px;
+            color: #7b2c00;
+            margin-bottom: 30px;
+        }
+        .page-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 3px;
+            background: #e67e22;
+            margin-top: 10px;
+        }
+        .orders-grid {
+            display: grid;
+            gap: 20px;
+        }
+        .order-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .order-number {
+            font-size: 18px;
+            font-weight: 600;
+            color: #7b2c00;
+        }
+        .order-status {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .status-en_attente { background: #f39c12; color: white; }
+        .status-confirmee { background: #3498db; color: white; }
+        .status-livree { background: #27ae60; color: white; }
+        .order-date { color: #666; font-size: 14px; margin-bottom: 10px; }
+        .order-total {
+            font-size: 20px;
+            font-weight: bold;
+            color: #e67e22;
+        }
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+        }
+        .empty-orders {
+            text-align: center;
+            padding: 60px;
+            background: white;
+            border-radius: 12px;
+        }
+        .btn {
+            background: #e67e22;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .whatsapp {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #25D366;
+            color: white;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            text-decoration: none;
+        }
+        @media (max-width: 768px) {
+            header { flex-direction: column; gap: 15px; }
+            nav a { margin: 0 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <i class="fas fa-tshirt"></i>
+            ANTOU & Guiny
+        </div>
+        <nav>
+            <a href="/">Accueil</a>
+            <a href="/tous-les-produits">Tous les produits</a>
+            <a href="/panier">Panier <span id="cart-count" class="cart-count">0</span></a>
+            <a href="/profil" id="auth-link">Mon compte</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1 class="page-title">📦 Mes Commandes</h1>
+        
+        <div class="orders-grid" id="orders-list">
+            <div class="loading"><i class="fas fa-spinner fa-spin"></i> Chargement...</div>
+        </div>
+    </div>
+
+    <a href="https://wa.me/22892984983" class="whatsapp" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script>
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        
+        function updateCartCount() {
+            const count = cart.reduce((sum, item) => sum + item.quantite, 0);
+            const cartCount = document.getElementById('cart-count');
+            if (cartCount) cartCount.textContent = count;
+        }
+        
+        function checkAuth() {
+            fetch('/check-session')
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.connected) {
+                        window.location.href = '/login-page';
+                    } else {
+                        document.getElementById('auth-link').innerHTML = `<i class="fas fa-user"></i> ${data.nom}`;
+                        loadOrders();
+                    }
+                })
+                .catch(() => {
+                    window.location.href = '/login-page';
+                });
+        }
+        
+        function loadOrders() {
+            fetch('/mes-commandes-api')
+                .then(res => res.json())
+                .then(orders => {
+                    const container = document.getElementById('orders-list');
+                    
+                    if (orders.length === 0) {
+                        container.innerHTML = `
+                            <div class="empty-orders">
+                                <i class="fas fa-box-open" style="font-size: 48px; color: #ccc;"></i>
+                                <p style="margin-top: 20px;">Vous n'avez pas encore passé de commande</p>
+                                <a href="/tous-les-produits" class="btn">Découvrir nos produits</a>
+                            </div>
+                        `;
+                        return;
+                    }
+                    
+                    container.innerHTML = '';
+                    orders.forEach(order => {
+                        const statusClass = `status-${order.statut}`;
+                        const statusText = {
+                            'en_attente': 'En attente',
+                            'confirmee': 'Confirmée',
+                            'livree': 'Livrée'
+                        }[order.statut] || order.statut;
+                        
+                        container.innerHTML += `
+                            <div class="order-card">
+                                <div class="order-header">
+                                    <span class="order-number">Commande #${order.id}</span>
+                                    <span class="order-status ${statusClass}">${statusText}</span>
+                                </div>
+                                <div class="order-date">
+                                    <i class="fas fa-calendar"></i> ${new Date(order.date).toLocaleDateString('fr-FR')} à ${new Date(order.date).toLocaleTimeString('fr-FR')}
+                                </div>
+                                <div class="order-total">
+                                    Total: ${order.total.toLocaleString()} FCFA
+                                </div>
+                            </div>
+                        `;
+                    });
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    document.getElementById('orders-list').innerHTML = '<div class="empty-orders">Erreur de chargement des commandes</div>';
+                });
+        }
+        
+        updateCartCount();
+        checkAuth();
+    </script>
+</body>
+</html>

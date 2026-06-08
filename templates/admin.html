@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - ANTOU & Guiny</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+    <style>
+        .admin-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        .admin-container h2 {
+            color: #8B4513;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .btn-submit {
+            background: #8B4513;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        
+        .btn-submit:hover {
+            background: #A0522D;
+        }
+        
+        .message {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .products-list {
+            margin-top: 40px;
+        }
+        
+        .product-item {
+            background: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        .delete-btn:hover {
+            background: #c82333;
+        }
+        
+        .logout-btn {
+            background: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        
+        .logout-btn:hover {
+            background: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">ANTOU & Guiny - Admin</div>
+        <nav>
+            <a href="/index">Accueil</a>
+            <a href="#" onclick="logout()">Déconnexion</a>
+        </nav>
+    </header>
+    
+    <div class="admin-container">
+        <h2>Ajouter un produit</h2>
+        
+        <form id="add-product-form">
+            <div class="form-group">
+                <label>Nom du produit</label>
+                <input type="text" id="nom" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Prix</label>
+                <input type="text" id="prix" placeholder="Ex: 15 000 FCFA" required>
+            </div>
+            
+            <div class="form-group">
+                <label>URL de l'image</label>
+                <input type="text" id="image" placeholder="https://exemple.com/image.jpg" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="description" rows="3"></textarea>
+            </div>
+            
+            <button type="submit" class="btn-submit">Ajouter le produit</button>
+        </form>
+        
+        <div id="message" class="message"></div>
+        
+        <div class="products-list">
+            <h3>Produits existants</h3>
+            <div id="products-list"></div>
+        </div>
+    </div>
+    
+    <script>
+        // Vérifier l'authentification
+        function checkAdminAuth() {
+            const isConnected = localStorage.getItem("connected") === "true";
+            const userRole = localStorage.getItem("user_role");
+            
+            if (!isConnected || userRole !== "admin") {
+                alert("Accès non autorisé. Veuillez vous connecter en tant qu'admin.");
+                window.location.href = "/login-page";
+            }
+        }
+        
+        // Charger les produits existants
+        async function loadProducts() {
+            try {
+                const response = await fetch("/products");
+                const produits = await response.json();
+                
+                const container = document.getElementById("products-list");
+                
+                if (produits.length === 0) {
+                    container.innerHTML = "<p>Aucun produit</p>";
+                    return;
+                }
+                
+                container.innerHTML = "";
+                produits.forEach(produit => {
+                    container.innerHTML += `
+                        <div class="product-item">
+                            <div>
+                                <strong>${produit.nom}</strong> - ${produit.prix}
+                                <br><small>${produit.description}</small>
+                            </div>
+                            <button class="delete-btn" onclick="deleteProduct(${produit.id})">Supprimer</button>
+                        </div>
+                    `;
+                });
+            } catch (error) {
+                console.error("Erreur chargement produits:", error);
+            }
+        }
+        
+        // Ajouter un produit
+        const form = document.getElementById("add-product-form");
+        const messageDiv = document.getElementById("message");
+        
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            
+            const nom = document.getElementById("nom").value;
+            const prix = document.getElementById("prix").value;
+            const image = document.getElementById("image").value;
+            const description = document.getElementById("description").value;
+            
+            try {
+                const response = await fetch("/add-product", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ nom, prix, image, description })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    messageDiv.className = "message success";
+                    messageDiv.style.display = "block";
+                    messageDiv.textContent = data.message;
+                    
+                    form.reset();
+                    loadProducts(); // Recharger la liste
+                    
+                    setTimeout(() => {
+                        messageDiv.style.display = "none";
+                    }, 3000);
+                } else {
+                    messageDiv.className = "message error";
+                    messageDiv.style.display = "block";
+                    messageDiv.textContent = data.error;
+                }
+            } catch (error) {
+                messageDiv.className = "message error";
+                messageDiv.style.display = "block";
+                messageDiv.textContent = "Erreur de connexion au serveur";
+            }
+        });
+        
+        // Supprimer un produit
+        async function deleteProduct(id) {
+            if (confirm("Êtes-vous sûr de vouloir supprimer ce produit ?")) {
+                try {
+                    const response = await fetch(`/delete-product/${id}`, {
+                        method: "DELETE"
+                    });
+                    
+                    if (response.ok) {
+                        alert("Produit supprimé");
+                        loadProducts();
+                    } else {
+                        alert("Erreur lors de la suppression");
+                    }
+                } catch (error) {
+                    console.error("Erreur:", error);
+                    alert("Erreur de connexion");
+                }
+            }
+        }
+        
+        // Déconnexion
+        async function logout() {
+            try {
+                await fetch("/logout", { method: "POST" });
+            } catch (error) {
+                console.error("Erreur:", error);
+            }
+            
+            localStorage.removeItem("connected");
+            localStorage.removeItem("user_email");
+            localStorage.removeItem("user_role");
+            localStorage.removeItem("user_name");
+            
+            window.location.href = "/login-page";
+        }
+        
+        // Initialisation
+        checkAdminAuth();
+        loadProducts();
+    </script>
+</body>
+</html>

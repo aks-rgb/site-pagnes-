@@ -1,0 +1,147 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+
+    font-family: Arial, sans-serif;
+
+    height: 100vh;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    background:
+    linear-gradient(
+        rgba(0,0,0,0.5),
+        rgba(0,0,0,0.5)
+    ),
+    url("images/bg.jpg");
+
+    background-size: cover;
+
+    background-position: center;
+}
+
+/* CONTAINER */
+
+.login-container{
+
+    width: 400px;
+
+    background: white;
+
+    padding: 40px;
+
+    border-radius: 15px;
+
+    box-shadow:
+    0 5px 20px rgba(0,0,0,0.2);
+}
+
+/* TITRE */
+
+.login-container h1{
+
+    text-align: center;
+
+    margin-bottom: 30px;
+
+    color: #7b0000;
+}
+
+/* FORMULAIRE */
+
+form{
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 20px;
+}
+
+/* INPUT */
+
+input{
+
+    padding: 15px;
+
+    border: 1px solid #ccc;
+
+    border-radius: 10px;
+
+    font-size: 16px;
+}
+
+/* BOUTON */
+
+button{
+
+    background: #7b0000;
+
+    color: white;
+
+    border: none;
+
+    padding: 15px;
+
+    border-radius: 10px;
+
+    font-size: 16px;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+button:hover{
+
+    background: orange;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:500px){
+
+    .login-container{
+
+        width: 90%;
+    }
+
+}
+
+/* TEXTE BAS */
+
+.bottom-text{
+
+    text-align: center;
+
+    margin-top: 20px;
+}
+
+.bottom-text p{
+
+    color: #555;
+
+    font-size: 14px;
+}
+
+.bottom-text a{
+
+    color: #7b0000;
+
+    text-decoration: none;
+
+    font-weight: bold;
+}
+
+.bottom-text a:hover{
+
+    color: orange;
+}

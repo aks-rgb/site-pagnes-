@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - ANTOU & Guiny</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+</head>
+<body>
+    <div class="login-container">
+        <h1>Créer un compte</h1>
+        
+        <form id="register-form">
+            <input type="text" id="nom" placeholder="Votre nom" required>
+            <input type="email" id="email" placeholder="Votre email" required>
+            <input type="password" id="password" placeholder="Votre mot de passe" required>
+            <input type="password" id="confirm-password" placeholder="Confirmer le mot de passe" required>
+            <button type="submit">S'inscrire</button>
+        </form>
+        
+        <div class="bottom-text">
+            <p>Vous avez déjà un compte ? <a href="/login-page">Se connecter</a></p>
+        </div>
+    </div>
+    
+    <script>
+        const form = document.getElementById("register-form");
+        
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            
+            const nom = document.getElementById("nom").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirm-password").value;
+            
+            // Vérifier que les mots de passe correspondent
+            if (password !== confirmPassword) {
+                alert("Les mots de passe ne correspondent pas");
+                return;
+            }
+            
+            // Vérifier la longueur du mot de passe
+            if (password.length < 4) {
+                alert("Le mot de passe doit contenir au moins 4 caractères");
+                return;
+            }
+            
+            try {
+                const response = await fetch("/register", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ nom, email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    alert(data.message);
+                    window.location.href = "/login-page";
+                } else {
+                    alert(data.error);
+                }
+            } catch (error) {
+                console.error("Erreur:", error);
+                alert("Erreur de connexion au serveur");
+            }
+        });
+    </script>
+</body>
+</html>

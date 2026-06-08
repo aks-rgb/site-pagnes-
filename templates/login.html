@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - ANTOU & Guiny</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+</head>
+<body>
+    <div class="login-container">
+        <h1>Connexion</h1>
+        
+        <form id="login-form">
+            <input type="email" id="email" placeholder="Votre email" required>
+            <input type="password" id="password" placeholder="Votre mot de passe" required>
+            <button type="submit">Se connecter</button>
+        </form>
+        
+        <div class="bottom-text">
+            <p>Pas encore de compte ? <a href="/register-page">S'inscrire</a></p>
+        </div>
+    </div>
+    
+    <script>
+        // SUPPRIME complètement le fichier auth.js et mets tout ici
+        
+        const form = document.getElementById("login-form");
+        
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            
+            // Afficher un message de chargement
+            const button = form.querySelector("button");
+            const originalText = button.textContent;
+            button.textContent = "Connexion en cours...";
+            button.disabled = true;
+            
+            try {
+                console.log("Tentative de connexion avec:", email);
+                
+                const response = await fetch("/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ 
+                        email: email, 
+                        password: password 
+                    })
+                });
+                
+                const data = await response.json();
+                console.log("Réponse du serveur:", data);
+                
+                if (response.ok) {
+                    // Connexion réussie
+                    localStorage.setItem("connected", "true");
+                    localStorage.setItem("user_email", email);
+                    localStorage.setItem("user_role", data.role);
+                    localStorage.setItem("user_name", data.nom);
+                    
+                    alert("Connexion réussie !");
+                    
+                    // Rediriger vers index
+                    window.location.href = "/index";
+                } else {
+                    // Identifiants invalides
+                    alert(data.error || "Email ou mot de passe incorrect");
+                }
+            } catch (error) {
+                console.error("Erreur détaillée:", error);
+                alert("Erreur de connexion au serveur. Vérifiez que Flask est démarré sur http://127.0.0.1:5000");
+            } finally {
+                // Restaurer le bouton
+                button.textContent = originalText;
+                button.disabled = false;
+            }
+        });
+        
+        // Vérifier si déjà connecté
+        if (localStorage.getItem("connected") === "true") {
+            window.location.href = "/index";
+        }
+    </script>
+</body>
+</html>

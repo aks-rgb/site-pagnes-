@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tous nos produits - ANTOU & Guiny</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f5f5f5;
+        }
+        
+        header {
+            background: #7b2c00;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 10%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+            transition: 0.3s;
+        }
+        
+        nav a:hover {
+            color: orange;
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, #7b2c00, #a04000);
+            color: white;
+            padding: 60px 10%;
+            text-align: center;
+        }
+        
+        .page-header h1 {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+        
+        .products-container {
+            padding: 40px 10%;
+            min-height: 60vh;
+        }
+        
+        .filters {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .search-box {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 50px;
+            padding: 12px 20px;
+        }
+        
+        .search-box i {
+            margin-right: 10px;
+            color: #7b2c00;
+        }
+        
+        .search-box input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 16px;
+        }
+        
+        .sort-box select {
+            padding: 12px 20px;
+            border: 1px solid #ddd;
+            border-radius: 50px;
+            background: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        .galerie {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .carte {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+        
+        .carte:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .carte img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+        
+        .carte-content {
+            padding: 20px;
+        }
+        
+        .carte-content h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #7b2c00;
+        }
+        
+        .prix {
+            font-size: 22px;
+            font-weight: bold;
+            color: #e67e22;
+            margin: 10px 0;
+        }
+        
+        .description {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .commander-btn {
+            width: 100%;
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        
+        .commander-btn:hover {
+            background: #128C7E;
+        }
+        
+        .badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #e67e22;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .carte {
+            position: relative;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 18px;
+            color: #666;
+        }
+        
+        .no-products {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #27ae60;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .cart-count {
+            background: #e74c3c;
+            border-radius: 50%;
+            padding: 2px 8px;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+        
+        .whatsapp {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #25D366;
+            color: white;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            text-decoration: none;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 100;
+        }
+        
+        footer {
+            background: #1a1a1a;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin-top: 50px;
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            nav a {
+                margin: 0 10px;
+            }
+            .page-header h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <i class="fas fa-tshirt"></i>
+            ANTOU & Guiny
+        </div>
+        <nav>
+            <a href="/">Accueil</a>
+            <a href="/tous-les-produits">Tous les produits</a>
+            <a href="/panier">Panier <span id="cart-count" class="cart-count">0</span></a>
+            <a href="#" id="auth-link">Connexion</a>
+        </nav>
+    </header>
+
+    <div class="page-header">
+        <h1><i class="fas fa-tshirt"></i> Tous nos produits</h1>
+        <p>Découvrez notre collection complète de pagnes africains</p>
+    </div>
+
+    <div class="products-container">
+        <div class="filters">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="recherche" placeholder="Rechercher un produit...">
+            </div>
+            <div class="sort-box">
+                <select id="tri">
+                    <option value="">Trier par</option>
+                    <option value="prix-croissant">Prix croissant</option>
+                    <option value="prix-decroissant">Prix décroissant</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="galerie" id="all-products">
+            <div class="loading"><i class="fas fa-spinner fa-spin"></i> Chargement...</div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 ANTOU & Guiny - Tous droits réservés</p>
+    </footer>
+
+    <a href="https://wa.me/22892984983" class="whatsapp" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script>
+        let allProducts = [];
+        let cart = [];
+        let syncInterval = null;
+        
+        // Mettre à jour le compteur du panier
+        function updateCartCount() {
+            const savedCart = localStorage.getItem('cart');
+            if (savedCart) {
+                cart = JSON.parse(savedCart);
+            }
+            const count = cart.reduce((sum, item) => sum + item.quantite, 0);
+            const cartCount = document.getElementById('cart-count');
+            if (cartCount) {
+                cartCount.textContent = count;
+                // Animation quand le compteur change
+                cartCount.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    cartCount.style.transform = 'scale(1)';
+                }, 200);
+            }
+        }
+        
+        // Afficher un toast personnalisé
+        function showToast(message, isError = false) {
+            // Supprimer les toasts existants
+            const existingToasts = document.querySelectorAll('.toast');
+            existingToasts.forEach(toast => toast.remove());
+            
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.style.background = isError ? '#e74c3c' : '#27ae60';
+            toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i> ${message}`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+        
+        // Vérifier l'authentification
+        function requireAuth(action) {
+            // Vérifier avec le serveur
+            return fetch('/check-session')
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.connected) {
+                        showToast(`Veuillez vous connecter pour ${action}`, true);
+                        setTimeout(() => {
+                            window.location.href = '/login-page';
+                        }, 1500);
+                        return false;
+                    }
+                    return true;
+                })
+                .catch(() => {
+                    // Fallback sur localStorage
+                    const connected = localStorage.getItem('connected');
+                    if (connected !== 'true') {
+                        showToast(`Veuillez vous connecter pour ${action}`, true);
+                        setTimeout(() => {
+                            window.location.href = '/login-page';
+                        }, 1500);
+                        return false;
+                    }
+                    return true;
+                });
+        }
+        
+        // Ajouter au panier avec animation
+        function addToCart(productId, productName, productPrice, productImage) {
+            requireAuth('ajouter au panier').then(isAuthenticated => {
+                if (!isAuthenticated) return;
+                
+                let cart = JSON.parse(localStorage.getItem('cart')) || [];
+                const existing = cart.find(item => item.id === productId);
+                
+                if (existing) {
+                    existing.quantite++;
+                    showToast(`${productName} : quantité ${existing.quantite}`);
+                } else {
+                    cart.push({
+                        id: productId,
+                        nom: productName,
+                        prix: productPrice,
+                        image: productImage,
+                        quantite: 1
+                    });
+                    showToast(`${productName} ajouté au panier !`);
+                }
+                
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartCount();
+                
+                // Animation sur le bouton cliqué
+                const buttons = document.querySelectorAll('.commander-btn');
+                buttons.forEach(btn => {
+                    if (btn.innerText.includes(productName) || btn.onclick.toString().includes(productId)) {
+                        btn.style.transform = 'scale(0.95)';
+                        setTimeout(() => {
+                            btn.style.transform = 'scale(1)';
+                        }, 200);
+                    }
+                });
+            });
+        }
+        
+        // Afficher les produits
+        function displayProducts(products) {
+            const container = document.getElementById('all-products');
+            if (!container) return;
+            
+            if (products.length === 0) {
+                container.innerHTML = '<div class="no-products"><i class="fas fa-search" style="font-size: 48px; margin-bottom: 20px;"></i><br>Aucun produit trouvé</div>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            products.forEach(produit => {
+                // Échapper les apostrophes dans le nom
+                const nomEscaped = produit.nom.replace(/'/g, "\\'");
+                const prixEscaped = produit.prix.toString().replace(/'/g, "\\'");
+                const imageEscaped = produit.image.replace(/'/g, "\\'");
+                
+                container.innerHTML += `
+                    <div class="carte">
+                        <div class="badge">⭐ Nouveau</div>
+                        <img src="${produit.image}" alt="${produit.nom}" onerror="this.src='https://placehold.co/400x300?text=ANTOU+Guiny'">
+                        <div class="carte-content">
+                            <h3>${produit.nom}</h3>
+                            <p class="prix">${produit.prix} FCFA</p>
+                            <p class="description">${produit.description || 'Superbe tissu africain de qualité'}</p>
+                            <button class="commander-btn" onclick="addToCart(${produit.id}, '${nomEscaped}', '${prixEscaped}', '${imageEscaped}')">
+                                <i class="fas fa-shopping-cart"></i> Ajouter au panier
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        
+        // Charger les produits depuis l'API
+        async function loadProducts() {
+            try {
+                const response = await fetch('/products');
+                if (!response.ok) throw new Error('Erreur réseau');
+                allProducts = await response.json();
+                console.log('Produits chargés:', allProducts.length);
+                displayProducts(allProducts);
+            } catch (error) {
+                console.error('Erreur:', error);
+                document.getElementById('all-products').innerHTML = '<div class="no-products"><i class="fas fa-exclamation-triangle" style="font-size: 48px; margin-bottom: 20px;"></i><br>Erreur de chargement des produits</div>';
+            }
+        }
+        
+        // Trier les produits
+        function sortProducts(criteria) {
+            let sorted = [...allProducts];
+            if (criteria === 'prix-croissant') {
+                sorted.sort((a, b) => parseInt(a.prix) - parseInt(b.prix));
+            } else if (criteria === 'prix-decroissant') {
+                sorted.sort((a, b) => parseInt(b.prix) - parseInt(a.prix));
+            }
+            displayProducts(sorted);
+        }
+        
+        // Rechercher des produits
+        function searchProducts() {
+            const searchTerm = document.getElementById('recherche').value.toLowerCase();
+            const filtered = allProducts.filter(p => p.nom.toLowerCase().includes(searchTerm));
+            displayProducts(filtered);
+        }
+        
+        // Vérifier l'authentification pour le header
+        function checkAuth() {
+            fetch('/check-session')
+                .then(response => response.json())
+                .then(data => {
+                    const authLink = document.getElementById('auth-link');
+                    if (data.connected) {
+                        authLink.innerHTML = `<i class="fas fa-user"></i> ${data.nom || 'Mon compte'}`;
+                        authLink.href = '/mes-commandes';
+                        localStorage.setItem('connected', 'true');
+                        localStorage.setItem('user_nom', data.nom || 'Client');
+                    } else {
+                        authLink.innerHTML = '<i class="fas fa-user"></i> Connexion';
+                        authLink.href = '/login-page';
+                        localStorage.setItem('connected', 'false');
+                    }
+                })
+                .catch(() => {
+                    // Fallback sur localStorage
+                    const authLink = document.getElementById('auth-link');
+                    const connected = localStorage.getItem('connected');
+                    const userNom = localStorage.getItem('user_nom');
+                    
+                    if (connected === 'true') {
+                        authLink.innerHTML = `<i class="fas fa-user"></i> ${userNom || 'Mon compte'}`;
+                        authLink.href = '/mes-commandes';
+                    } else {
+                        authLink.innerHTML = '<i class="fas fa-user"></i> Connexion';
+                        authLink.href = '/login-page';
+                    }
+                });
+        }
+        
+        // Synchronisation en temps réel du compteur
+        function initRealTimeSync() {
+            // Mettre à jour le compteur immédiatement
+            updateCartCount();
+            
+            // Écouter les changements du localStorage (pour les autres onglets)
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'cart') {
+                    console.log('Panier modifié dans un autre onglet');
+                    updateCartCount();
+                    showToast('🛒 Panier mis à jour', false);
+                }
+            });
+            
+            // Vérification périodique (toutes les 2 secondes)
+            if (syncInterval) clearInterval(syncInterval);
+            syncInterval = setInterval(function() {
+                const savedCart = localStorage.getItem('cart');
+                const currentCartStr = JSON.stringify(cart);
+                if (savedCart && savedCart !== currentCartStr) {
+                    cart = JSON.parse(savedCart);
+                    updateCartCount();
+                }
+            }, 2000);
+            
+            // Rafraîchir quand la page devient visible
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) {
+                    updateCartCount();
+                }
+            });
+        }
+        
+        // Nettoyer l'intervalle à la fermeture
+        window.addEventListener('beforeunload', function() {
+            if (syncInterval) {
+                clearInterval(syncInterval);
+            }
+        });
+        
+        // Événements des filtres
+        document.getElementById('tri')?.addEventListener('change', (e) => sortProducts(e.target.value));
+        document.getElementById('recherche')?.addEventListener('keyup', searchProducts);
+        
+        // Initialisation
+        initRealTimeSync();
+        loadProducts();
+        checkAuth();
+    </script>
+</body>
+</html>

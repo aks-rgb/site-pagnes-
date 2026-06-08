@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Panier - ANTOU & Guiny</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f5f5f5;
+            color: #222;
+        }
+        
+        header {
+            background: #7b0000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 10%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .logo {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+            transition: 0.3s;
+        }
+        
+        nav a:hover {
+            color: orange;
+        }
+        
+        .cart-container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 0 20px;
+            min-height: 60vh;
+        }
+        
+        .cart-title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #7b0000;
+        }
+        
+        .cart-grid {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+        }
+        
+        .cart-items {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+        
+        .cart-item {
+            display: grid;
+            grid-template-columns: 100px 1fr auto auto auto;
+            gap: 15px;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .cart-item-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        
+        .cart-item-info h3 {
+            margin: 0 0 5px 0;
+            color: #333;
+            font-size: 16px;
+        }
+        
+        .cart-item-info .prix {
+            color: #7b0000;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .cart-item-quantite {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .cart-item-quantite button {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #ddd;
+            background: #f9f9f9;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        
+        .cart-item-quantite button:hover {
+            background: #7b0000;
+            color: white;
+        }
+        
+        .cart-item-quantite span {
+            min-width: 30px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .cart-item-total {
+            font-weight: bold;
+            color: #7b0000;
+            font-size: 16px;
+        }
+        
+        .cart-item-remove {
+            color: #ff4444;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        
+        .cart-item-remove:hover {
+            color: #cc0000;
+        }
+        
+        .cart-summary {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 20px;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+        
+        .cart-summary h3 {
+            color: #7b0000;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #7b0000;
+        }
+        
+        .summary-line {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding: 5px 0;
+        }
+        
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+            font-size: 20px;
+            font-weight: bold;
+            color: #7b0000;
+        }
+        
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.3s;
+        }
+        
+        .btn-whatsapp:hover {
+            transform: translateY(-2px);
+            background: #128C7E;
+        }
+        
+        .btn-continuer {
+            background: #7b0000;
+            color: white;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .btn-continuer:hover {
+            background: #a00000;
+        }
+        
+        .empty-cart {
+            text-align: center;
+            padding: 50px;
+        }
+        
+        .empty-cart i {
+            font-size: 80px;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        footer {
+            background: #111;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin-top: 50px;
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            nav a {
+                margin: 0 10px;
+            }
+            
+            .cart-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cart-item {
+                grid-template-columns: 80px 1fr;
+                gap: 10px;
+            }
+            
+            .cart-item-quantite {
+                grid-column: 2;
+            }
+            
+            .cart-item-total {
+                grid-column: 2;
+            }
+            
+            .cart-item-remove {
+                grid-column: 2;
+                justify-self: end;
+            }
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #333;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 5px;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .cart-count {
+            background: #e74c3c;
+            border-radius: 50%;
+            padding: 2px 8px;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+
+        .sync-status {
+            font-size: 12px;
+            color: #27ae60;
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <i class="fas fa-tshirt"></i>
+            ANTOU & Guiny
+        </div>
+        <nav>
+            <a href="/"><i class="fas fa-home"></i> Accueil</a>
+            <a href="/tous-les-produits"><i class="fas fa-tshirt"></i> Produits</a>
+            <a href="/panier"><i class="fas fa-shopping-cart"></i> Panier <span id="cart-count" class="cart-count">0</span></a>
+            <a href="#" id="auth-link"><i class="fas fa-user"></i> Mon compte</a>
+        </nav>
+    </header>
+    
+    <div class="cart-container">
+        <h1 class="cart-title">
+            <i class="fas fa-shopping-cart"></i> Mon Panier
+        </h1>
+        
+        <div class="cart-grid">
+            <div class="cart-items" id="cart-items">
+                <div class="loading">Chargement...</div>
+            </div>
+            
+            <div class="cart-summary">
+                <h3>Récapitulatif</h3>
+                <div id="summary-content"></div>
+                <div class="sync-status" id="sync-status">
+                    <i class="fas fa-check-circle"></i> Synchronisé
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2026 ANTOU & Guiny - Tous droits réservés</p>
+    </footer>
+    
+    <script>
+        let cart = [];
+        let isConnected = false;
+        let userName = '';
+        let syncInterval = null;
+        
+        // Convertir prix en nombre
+        function convertirPrixEnNombre(prixStr) {
+            if (!prixStr) return 0;
+            const nombre = parseInt(prixStr.toString().replace(/[^0-9]/g, ''));
+            return isNaN(nombre) ? 0 : nombre;
+        }
+        
+        // Formater prix
+        function formaterPrix(prix) {
+            return prix.toLocaleString('fr-FR') + ' FCFA';
+        }
+        
+        // Calculer total
+        function calculerTotal() {
+            return cart.reduce((total, item) => {
+                const prix = convertirPrixEnNombre(item.prix);
+                return total + (prix * item.quantite);
+            }, 0);
+        }
+        
+        // Calculer nombre total d'articles
+        function calculerNombreArticles() {
+            return cart.reduce((total, item) => total + item.quantite, 0);
+        }
+        
+        // Mettre à jour le compteur du panier dans le header
+        function updateCartCount() {
+            const count = calculerNombreArticles();
+            const cartCountElement = document.getElementById('cart-count');
+            if (cartCountElement) {
+                cartCountElement.textContent = count;
+            }
+        }
+        
+        // Afficher un message toast
+        function showToast(message, isError = false) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.style.background = isError ? '#e74c3c' : '#27ae60';
+            toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i> ${message}`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+        
+        // Sauvegarder le panier
+        function saveCart() {
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            // Déclencher un événement pour informer les autres pages
+            window.dispatchEvent(new StorageEvent('storage', {
+                key: 'cart',
+                newValue: JSON.stringify(cart),
+                oldValue: null
+            }));
+        }
+        
+        // Modifier quantité
+        function modifierQuantite(index, changement) {
+            if (!cart[index]) return;
+            const nouvelleQuantite = cart[index].quantite + changement;
+            if (nouvelleQuantite <= 0) {
+                supprimerArticle(index);
+            } else {
+                cart[index].quantite = nouvelleQuantite;
+                saveCart();
+                afficherPanier();
+                showToast(`Quantité mise à jour : ${cart[index].quantite}`);
+            }
+        }
+        
+        // Supprimer article
+        function supprimerArticle(index) {
+            const produitNom = cart[index].nom;
+            cart.splice(index, 1);
+            saveCart();
+            afficherPanier();
+            showToast(`${produitNom} supprimé du panier`);
+        }
+        
+        // Vider le panier
+        function viderPanier() {
+            if (cart.length > 0 && confirm('Voulez-vous vraiment vider votre panier ?')) {
+                cart = [];
+                saveCart();
+                afficherPanier();
+                showToast('Panier vidé');
+            }
+        }
+        
+        // Continuer achat
+        function continuerAchat() {
+            window.location.href = '/tous-les-produits';
+        }
+        
+        // Générer message WhatsApp
+        function genererMessageWhatsApp() {
+            const nom = document.getElementById('client-nom')?.value || userName || 'Client';
+            const telephone = document.getElementById('client-telephone')?.value || 'Non spécifié';
+            const adresse = document.getElementById('client-adresse')?.value || 'Non spécifiée';
+            
+            let message = "🛍️ *NOUVELLE COMMANDE* 🛍️\n\n";
+            message += `👤 *Client* : ${nom}\n`;
+            message += `📞 *Téléphone* : ${telephone}\n`;
+            message += `📍 *Adresse* : ${adresse}\n\n`;
+            message += "─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─\n\n";
+            message += "*📦 DÉTAIL DE LA COMMANDE*\n\n";
+            
+            let total = 0;
+            cart.forEach((item, index) => {
+                const prixNombre = convertirPrixEnNombre(item.prix);
+                const totalItem = prixNombre * item.quantite;
+                total += totalItem;
+                
+                message += `${index + 1}. *${item.nom}*\n`;
+                message += `   Prix : ${item.prix} FCFA\n`;
+                message += `   Quantité : ${item.quantite}\n`;
+                message += `   Sous-total : ${formaterPrix(totalItem)}\n\n`;
+            });
+            
+            message += "─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─\n\n";
+            message += `💰 *TOTAL* : ${formaterPrix(total)}\n\n`;
+            message += "🙏 *Merci pour votre commande !*\n";
+            message += "Nous vous contacterons sous 24h.";
+            
+            return encodeURIComponent(message);
+        }
+        
+        // Commander via WhatsApp
+        function commanderViaWhatsApp() {
+            const nom = document.getElementById('client-nom')?.value;
+            const telephone = document.getElementById('client-telephone')?.value;
+            const adresse = document.getElementById('client-adresse')?.value;
+            
+            if (!nom) {
+                showToast("❌ Veuillez entrer votre nom", true);
+                document.getElementById('client-nom').focus();
+                return;
+            }
+            if (!telephone) {
+                showToast("❌ Veuillez entrer votre numéro de téléphone", true);
+                document.getElementById('client-telephone').focus();
+                return;
+            }
+            if (!adresse) {
+                showToast("❌ Veuillez entrer votre adresse de livraison", true);
+                document.getElementById('client-adresse').focus();
+                return;
+            }
+            
+            if (cart.length === 0) {
+                showToast("❌ Votre panier est vide", true);
+                return;
+            }
+            
+            const numeroFournisseur = "22892984983";
+            const message = genererMessageWhatsApp();
+            const url = `https://wa.me/${numeroFournisseur}?text=${message}`;
+            
+            // Sauvegarder la commande dans l'historique
+            const commande = {
+                id: Date.now(),
+                date: new Date().toISOString(),
+                client: { nom, telephone, adresse },
+                panier: JSON.parse(JSON.stringify(cart)),
+                total: formaterPrix(calculerTotal())
+            };
+            
+            const commandes = JSON.parse(localStorage.getItem('commandes')) || [];
+            commandes.unshift(commande);
+            localStorage.setItem('commandes', JSON.stringify(commandes));
+            
+            // Ouvrir WhatsApp
+            window.open(url, '_blank');
+            
+            // Vider le panier
+            cart = [];
+            saveCart();
+            
+            showToast("✓ Commande envoyée ! Le fournisseur vous contactera sous 24h");
+            
+            // Rediriger vers l'accueil après 2 secondes
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 2000);
+        }
+        
+        // Recharger le panier depuis localStorage
+        function reloadCartFromStorage() {
+            const savedCart = localStorage.getItem('cart');
+            if (savedCart) {
+                const newCart = JSON.parse(savedCart);
+                // Vérifier si le panier a changé
+                if (JSON.stringify(cart) !== JSON.stringify(newCart)) {
+                    cart = newCart;
+                    afficherPanier();
+                    const statusElement = document.getElementById('sync-status');
+                    if (statusElement) {
+                        statusElement.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> Synchronisé';
+                        setTimeout(() => {
+                            statusElement.innerHTML = '<i class="fas fa-check-circle"></i> Synchronisé';
+                        }, 2000);
+                    }
+                    return true;
+                }
+            } else if (cart.length > 0) {
+                cart = [];
+                afficherPanier();
+                return true;
+            }
+            return false;
+        }
+        
+        // Afficher le panier
+        function afficherPanier() {
+            // Recharger TOUJOURS depuis localStorage pour être sûr d'avoir les dernières données
+            const savedCart = localStorage.getItem('cart');
+            if (savedCart) {
+                cart = JSON.parse(savedCart);
+            } else {
+                cart = [];
+            }
+            
+            const container = document.getElementById('cart-items');
+            const summaryContainer = document.getElementById('summary-content');
+            
+            if (!container) return;
+            
+            // Mettre à jour le compteur
+            updateCartCount();
+            
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <h2>Votre panier est vide</h2>
+                        <p>Découvrez nos magnifiques pagnes africains</p>
+                        <button class="btn-continuer" onclick="continuerAchat()" style="display: inline-block; width: auto; padding: 12px 30px;">
+                            <i class="fas fa-shopping-bag"></i> Découvrir nos produits
+                        </button>
+                    </div>
+                `;
+                summaryContainer.innerHTML = `
+                    <div style="text-align: center; padding: 20px;">
+                        <i class="fas fa-shopping-cart" style="font-size: 48px; color: #ddd; margin-bottom: 10px;"></i>
+                        <p>Ajoutez des produits à votre panier</p>
+                        <button class="btn-continuer" onclick="continuerAchat()" style="margin-top: 15px;">
+                            Voir les produits
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Afficher les articles
+            container.innerHTML = '';
+            cart.forEach((item, index) => {
+                const prixNombre = convertirPrixEnNombre(item.prix);
+                const totalItem = prixNombre * item.quantite;
+                
+                container.innerHTML += `
+                    <div class="cart-item">
+                        <img src="${item.image || 'https://via.placeholder.com/80'}" alt="${item.nom}" class="cart-item-image" onerror="this.src='https://via.placeholder.com/80'">
+                        <div class="cart-item-info">
+                            <h3>${item.nom}</h3>
+                            <p class="prix">${item.prix} FCFA</p>
+                        </div>
+                        <div class="cart-item-quantite">
+                            <button onclick="modifierQuantite(${index}, -1)">-</button>
+                            <span>${item.quantite}</span>
+                            <button onclick="modifierQuantite(${index}, 1)">+</button>
+                        </div>
+                        <div class="cart-item-total">
+                            ${formaterPrix(totalItem)}
+                        </div>
+                        <div class="cart-item-remove" onclick="supprimerArticle(${index})">
+                            <i class="fas fa-trash"></i>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // Afficher le résumé
+            const total = calculerTotal();
+            const nbArticles = calculerNombreArticles();
+            
+            summaryContainer.innerHTML = `
+                <div class="summary-line">
+                    <span>Articles (${nbArticles})</span>
+                    <span>${formaterPrix(total)}</span>
+                </div>
+                <div class="summary-line">
+                    <span>Livraison</span>
+                    <span><span style="color: green;">Gratuite</span></span>
+                </div>
+                <div class="summary-total">
+                    <span>Total</span>
+                    <span>${formaterPrix(total)}</span>
+                </div>
+                
+                <div class="form-group">
+                    <label>Nom complet <span style="color: red;">*</span></label>
+                    <input type="text" id="client-nom" placeholder="Votre nom complet" value="${userName}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Téléphone WhatsApp <span style="color: red;">*</span></label>
+                    <input type="tel" id="client-telephone" placeholder="Ex: 90 00 00 00" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Adresse de livraison <span style="color: red;">*</span></label>
+                    <textarea id="client-adresse" rows="3" placeholder="Votre adresse complète (quartier, ville, point de repère...)" required></textarea>
+                </div>
+                
+                <button class="btn-whatsapp" onclick="commanderViaWhatsApp()">
+                    <i class="fab fa-whatsapp"></i> Commander via WhatsApp
+                </button>
+                
+                <button class="btn-continuer" onclick="continuerAchat()">
+                    <i class="fas fa-shopping-bag"></i> Continuer mes achats
+                </button>
+                
+                ${cart.length > 0 ? `
+                <button class="btn-continuer" onclick="viderPanier()" style="background: #e74c3c; margin-top: 10px;">
+                    <i class="fas fa-trash-alt"></i> Vider le panier
+                </button>
+                ` : ''}
+            `;
+        }
+        
+        // Synchronisation en temps réel avec localStorage
+        function initRealTimeSync() {
+            // Méthode 1: Écouter les événements storage (pour les autres onglets)
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'cart') {
+                    console.log('Panier modifié dans un autre onglet');
+                    const newCart = JSON.parse(e.newValue) || [];
+                    if (JSON.stringify(cart) !== JSON.stringify(newCart)) {
+                        cart = newCart;
+                        afficherPanier();
+                        showToast('🛒 Panier mis à jour');
+                    }
+                }
+            });
+            
+            // Méthode 2: Écouter un événement personnalisé (même page)
+            window.addEventListener('cart-updated', function() {
+                console.log('Événement cart-updated détecté');
+                reloadCartFromStorage();
+            });
+            
+            // Méthode 3: Vérification périodique (toutes les 1.5 secondes)
+            if (syncInterval) clearInterval(syncInterval);
+            syncInterval = setInterval(function() {
+                const savedCart = localStorage.getItem('cart');
+                const currentCartStr = JSON.stringify(cart);
+                if (savedCart && savedCart !== currentCartStr) {
+                    console.log('Changement détecté par polling');
+                    const newCart = JSON.parse(savedCart);
+                    cart = newCart;
+                    afficherPanier();
+                }
+            }, 1500);
+            
+            // Méthode 4: Rafraîchir quand la page devient visible
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) {
+                    console.log('Page devenue visible, rafraîchissement');
+                    reloadCartFromStorage();
+                }
+            });
+        }
+        
+        // Vérifier la connexion
+        async function checkAuth() {
+            try {
+                const response = await fetch('/check-session');
+                const data = await response.json();
+                
+                isConnected = data.connected;
+                
+                const authLink = document.getElementById('auth-link');
+                if (isConnected) {
+                    userName = data.nom || 'Client';
+                    authLink.innerHTML = `<i class="fas fa-user"></i> ${userName}`;
+                    authLink.href = '/mes-commandes';
+                } else {
+                    authLink.innerHTML = '<i class="fas fa-user"></i> Connexion';
+                    authLink.href = '/login-page';
+                }
+                
+                // Charger le panier depuis localStorage
+                const savedCart = localStorage.getItem('cart');
+                if (savedCart) {
+                    cart = JSON.parse(savedCart);
+                } else {
+                    cart = [];
+                }
+                
+                afficherPanier();
+                
+            } catch (error) {
+                console.error('Erreur de connexion:', error);
+                // Mode dégradé - charger le panier local
+                const savedCart = localStorage.getItem('cart');
+                if (savedCart) {
+                    cart = JSON.parse(savedCart);
+                } else {
+                    cart = [];
+                }
+                afficherPanier();
+            }
+        }
+        
+        // Nettoyer l'intervalle quand la page se ferme
+        window.addEventListener('beforeunload', function() {
+            if (syncInterval) {
+                clearInterval(syncInterval);
+            }
+        });
+        
+        // Initialisation
+        initRealTimeSync();
+        checkAuth();
+    </script>
+</body>
+</html>

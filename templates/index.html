@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANTOU & Guiny - Boutique de Pagnes Africains</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f5f5f5;
+        }
+        
+        header {
+            background: #7b2c00;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 10%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+            transition: 0.3s;
+        }
+        
+        nav a:hover {
+            color: orange;
+        }
+        
+        .hero {
+            height: 80vh;
+            background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(0,0,0,0.5)), url('/static/images/hero-bg.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
+        
+        .hero-content h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .hero-content p {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        
+        .btn {
+            background: #e67e22;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+            display: inline-block;
+        }
+        
+        .btn:hover {
+            background: #f39c12;
+            transform: translateY(-3px);
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 50px 10%;
+            background: white;
+            text-align: center;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .stat-item i {
+            font-size: 40px;
+            color: #e67e22;
+            margin-bottom: 10px;
+        }
+        
+        .stat-item h3 {
+            font-size: 28px;
+            color: #7b2c00;
+        }
+        
+        .categories {
+            padding: 60px 10%;
+        }
+        
+        .titre-section {
+            text-align: center;
+            font-size: 32px;
+            color: #7b2c00;
+            margin-bottom: 40px;
+        }
+        
+        .titre-section::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 3px;
+            background: #e67e22;
+            margin: 15px auto 0;
+        }
+        
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .categorie-card {
+            background: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .categorie-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .categorie-card i {
+            font-size: 40px;
+            color: #e67e22;
+            margin-bottom: 15px;
+        }
+        
+        .categorie-card h3 {
+            color: #7b2c00;
+            margin-bottom: 10px;
+        }
+        
+        .featured {
+            padding: 60px 10%;
+            background: #f8f9fa;
+        }
+        
+        .produits-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .view-all-btn {
+            background: transparent;
+            border: 2px solid #e67e22;
+            color: #e67e22;
+            padding: 10px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        
+        .view-all-btn:hover {
+            background: #e67e22;
+            color: white;
+        }
+        
+        .galerie {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .carte {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: 0.3s;
+            position: relative;
+        }
+        
+        .carte:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .carte img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+        
+        .badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #e67e22;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 1;
+        }
+        
+        .badge.vedette {
+            background: #e74c3c;
+        }
+        
+        .carte-content {
+            padding: 20px;
+        }
+        
+        .carte-content h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #7b2c00;
+        }
+        
+        .prix {
+            font-size: 22px;
+            font-weight: bold;
+            color: #e67e22;
+            margin: 10px 0;
+        }
+        
+        .description {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .commander-btn {
+            width: 100%;
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        
+        .commander-btn:hover {
+            background: #128C7E;
+        }
+        
+        .newsletter {
+            background: #7b2c00;
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        
+        .newsletter-content {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .newsletter-content h2 {
+            margin-bottom: 15px;
+        }
+        
+        .newsletter-content form {
+            display: flex;
+            margin-top: 20px;
+        }
+        
+        .newsletter-content input {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 50px 0 0 50px;
+            font-size: 16px;
+        }
+        
+        .newsletter-content button {
+            background: #e67e22;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 0 50px 50px 0;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        footer {
+            background: #1a1a1a;
+            color: white;
+            padding: 40px 10% 20px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 15px;
+            color: #e67e22;
+        }
+        
+        .footer-section p, .footer-section a {
+            color: #aaa;
+            text-decoration: none;
+            line-height: 1.8;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+        
+        .social-links a:hover {
+            background: #e67e22;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+            color: #666;
+        }
+        
+        .whatsapp {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #25D366;
+            color: white;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            text-decoration: none;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 100;
+        }
+        
+        .cart-count {
+            background: #e74c3c;
+            border-radius: 50%;
+            padding: 2px 8px;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #333;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            z-index: 1000;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            nav a {
+                margin: 0 10px;
+            }
+            .hero-content h1 {
+                font-size: 28px;
+            }
+            .stats {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <i class="fas fa-tshirt"></i>
+            ANTOU & Guiny
+        </div>
+        <nav>
+            <a href="/">Accueil</a>
+            <a href="/tous-les-produits">Tous les produits</a>
+            <a href="/panier">Panier <span id="cart-count" class="cart-count">0</span></a>
+            <a href="#" id="auth-link">Connexion</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>La beauté africaine <br>dans chaque tissu</h1>
+            <p>Découvrez nos collections exclusives de pagnes africains modernes et authentiques</p>
+            <a href="/tous-les-produits" class="btn">Acheter maintenant <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="stat-item">
+            <i class="fas fa-users"></i>
+            <h3>1000+</h3>
+            <p>Clients satisfaits</p>
+        </div>
+        <div class="stat-item">
+            <i class="fas fa-tshirt"></i>
+            <h3>50+</h3>
+            <p>Produits disponibles</p>
+        </div>
+        <div class="stat-item">
+            <i class="fas fa-truck"></i>
+            <h3>Livraison</h3>
+            <p>Partout au Togo</p>
+        </div>
+    </section>
+
+    <section class="categories">
+        <h2 class="titre-section">Nos Catégories</h2>
+        <div class="categories-grid">
+            <div class="categorie-card" data-categorie="premium">
+                <i class="fas fa-crown"></i>
+                <h3>Premium</h3>
+                <p>Haut de gamme</p>
+            </div>
+            <div class="categorie-card" data-categorie="classique">
+                <i class="fas fa-star"></i>
+                <h3>Classique</h3>
+                <p>Quotidien</p>
+            </div>
+            <div class="categorie-card" data-categorie="ceremonie">
+                <i class="fas fa-ring"></i>
+                <h3>Cérémonie</h3>
+                <p>Mariages, baptêmes</p>
+            </div>
+            <div class="categorie-card" data-categorie="saison">
+                <i class="fas fa-sun"></i>
+                <h3>Saisonniers</h3>
+                <p>Collections spéciales</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="featured">
+        <div class="produits-header">
+            <h2 class="titre-section" style="margin-bottom: 0;">⭐ Produits en Vedette</h2>
+            <a href="/tous-les-produits" class="view-all-btn">Voir tous <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="galerie" id="featured-products">
+            <div class="loading"><i class="fas fa-spinner fa-spin"></i> Chargement...</div>
+        </div>
+    </section>
+
+    <section class="newsletter">
+        <div class="newsletter-content">
+            <h2><i class="fas fa-envelope"></i> Newsletter</h2>
+            <p>Recevez nos offres exclusives et nouveautés</p>
+            <form id="newsletter-form">
+                <input type="email" placeholder="Votre email" required>
+                <button type="submit">S'abonner</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>ANTOU & Guiny</h3>
+                <p>Boutique spécialisée dans les pagnes africains élégants et authentiques.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Liens rapides</h3>
+                <a href="/">Accueil</a>
+                <a href="/tous-les-produits">Tous les produits</a>
+                <a href="/panier">Panier</a>
+            </div>
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <p><i class="fas fa-phone"></i> +228 92 98 49 83</p>
+                <p><i class="fas fa-envelope"></i> contact@antouguiny.com</p>
+                <p><i class="fas fa-map-marker-alt"></i> Kara - Togo</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 ANTOU & Guiny - Tous droits réservés</p>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/22892984983" class="whatsapp" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script>
+        let allProducts = [];
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        
+        function updateCartCount() {
+            const count = cart.reduce((sum, item) => sum + item.quantite, 0);
+            const cartCount = document.getElementById('cart-count');
+            if (cartCount) cartCount.textContent = count;
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+        
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+        
+        function requireAuth(action) {
+            const connected = localStorage.getItem('connected');
+            if (connected !== 'true') {
+                alert('Veuillez vous connecter pour ' + action);
+                window.location.href = '/login-page';
+                return false;
+            }
+            return true;
+        }
+        
+        function addToCart(productId, productName, productPrice, productImage) {
+            if (!requireAuth('ajouter au panier')) return;
+            
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const existing = cart.find(item => item.id === productId);
+            
+            if (existing) {
+                existing.quantite++;
+            } else {
+                cart.push({
+                    id: productId,
+                    nom: productName,
+                    prix: productPrice,
+                    image: productImage,
+                    quantite: 1
+                });
+            }
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            showToast(`${productName} ajouté au panier !`);
+        }
+        
+        function displayProducts(products, containerId, isFeatured = false) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            if (products.length === 0) {
+                container.innerHTML = '<div class="no-products">Aucun produit trouvé</div>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            products.forEach(produit => {
+                const badgeText = isFeatured ? '⭐ Vedette' : '⭐ Nouveau';
+                // CORRECTION : Utiliser l'image de la base de données (peut être locale ou http)
+                let imageUrl = produit.image;
+                
+                // Si l'image n'existe pas ou est vide, utiliser placeholder
+                if (!imageUrl) {
+                    imageUrl = 'https://placehold.co/400x300?text=ANTOU+Guiny';
+                }
+                
+                container.innerHTML += `
+                    <div class="carte">
+                        <div class="badge ${isFeatured ? 'vedette' : ''}">${badgeText}</div>
+                        <img src="${imageUrl}" alt="${produit.nom}" onerror="this.src='https://placehold.co/400x300?text=ANTOU+Guiny'">
+                        <div class="carte-content">
+                            <h3>${produit.nom}</h3>
+                            <p class="prix">${produit.prix} FCFA</p>
+                            <p class="description">${produit.description ? produit.description.substring(0, 80) : 'Superbe tissu africain de qualité'}</p>
+                            <button class="commander-btn" onclick="addToCart(${produit.id}, '${produit.nom}', '${produit.prix}', '${imageUrl}')">
+                                <i class="fas fa-shopping-cart"></i> Ajouter au panier
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        
+        async function loadProducts() {
+            try {
+                const response = await fetch('/products');
+                allProducts = await response.json();
+                console.log('Produits chargés:', allProducts);
+                
+                // Afficher les 3 premiers produits en vedette
+                const featured = allProducts.slice(0, 3);
+                displayProducts(featured, 'featured-products', true);
+            } catch (error) {
+                console.error('Erreur:', error);
+                document.getElementById('featured-products').innerHTML = '<div class="loading">Erreur de chargement</div>';
+            }
+        }
+        
+        function checkAuth() {
+            const authLink = document.getElementById('auth-link');
+            const connected = localStorage.getItem('connected');
+            const userNom = localStorage.getItem('user_nom');
+            
+            if (connected === 'true') {
+                authLink.innerHTML = `<i class="fas fa-user"></i> ${userNom || 'Mon compte'}`;
+                authLink.href = '/profil';
+            } else {
+                authLink.innerHTML = '<i class="fas fa-user"></i> Connexion';
+                authLink.href = '/login-page';
+            }
+        }
+        
+        document.getElementById('newsletter-form')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            showToast('Merci pour votre inscription !');
+            e.target.reset();
+        });
+        
+        loadProducts();
+        updateCartCount();
+        checkAuth();
+    </script>
+</body>
+</html>

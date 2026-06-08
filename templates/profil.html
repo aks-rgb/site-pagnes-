@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Compte - ANTOU & Guiny</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f5f5f5;
+        }
+        
+        header {
+            background: #7b2c00;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 10%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+            transition: 0.3s;
+        }
+        
+        nav a:hover {
+            color: orange;
+        }
+        
+        .cart-count {
+            background: #e74c3c;
+            border-radius: 50%;
+            padding: 2px 8px;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        .page-title {
+            font-size: 32px;
+            color: #7b2c00;
+            margin-bottom: 30px;
+        }
+        
+        .page-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 3px;
+            background: #e67e22;
+            margin-top: 10px;
+        }
+        
+        .account-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+        }
+        
+        .sidebar {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+        
+        .user-info {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+        
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            background: #e67e22;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+        }
+        
+        .user-avatar i {
+            font-size: 40px;
+            color: white;
+        }
+        
+        .user-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #7b2c00;
+        }
+        
+        .user-email {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 10px;
+        }
+        
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            color: #333;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+        
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background: #f5f5f5;
+            color: #e67e22;
+        }
+        
+        .sidebar-menu a i {
+            width: 20px;
+        }
+        
+        .logout-btn {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .logout-btn a {
+            color: #e74c3c !important;
+        }
+        
+        .main-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-size: 24px;
+            color: #7b2c00;
+            margin-bottom: 20px;
+        }
+        
+        .info-group {
+            margin-bottom: 20px;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            font-size: 16px;
+            color: #333;
+            padding: 8px 0;
+        }
+        
+        .edit-btn {
+            background: #e67e22;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        
+        .orders-list {
+            list-style: none;
+        }
+        
+        .order-item {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .order-id {
+            font-weight: 600;
+            color: #7b2c00;
+        }
+        
+        .order-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-en_attente {
+            background: #f39c12;
+            color: white;
+        }
+        
+        .status-confirmee {
+            background: #3498db;
+            color: white;
+        }
+        
+        .status-livree {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .order-total {
+            font-weight: 600;
+            color: #e67e22;
+        }
+        
+        .empty-orders {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #333;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            z-index: 1000;
+        }
+        
+        .whatsapp {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #25D366;
+            color: white;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            text-decoration: none;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 100;
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            nav a {
+                margin: 0 10px;
+            }
+            .account-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <i class="fas fa-tshirt"></i>
+            ANTOU & Guiny
+        </div>
+        <nav>
+            <a href="/">Accueil</a>
+            <a href="/tous-les-produits">Tous les produits</a>
+            <a href="/panier">Panier <span id="cart-count" class="cart-count">0</span></a>
+            <a href="#" id="auth-link">Mon compte</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1 class="page-title">Mon Compte</h1>
+        
+        <div class="account-grid">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-name" id="user-name">Chargement...</div>
+                    <div class="user-email" id="user-email">...</div>
+                </div>
+                <ul class="sidebar-menu">
+                    <li><a href="#" class="active" data-tab="info"><i class="fas fa-user-circle"></i> Mes informations</a></li>
+                    <li><a href="#" data-tab="orders"><i class="fas fa-shopping-bag"></i> Mes commandes</a></li>
+                    <li><a href="/panier"><i class="fas fa-shopping-cart"></i> Mon panier</a></li>
+                </ul>
+                <div class="logout-btn">
+                    <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="main-content">
+                <div id="info-tab">
+                    <h2 class="section-title">Mes informations personnelles</h2>
+                    <div class="info-group">
+                        <div class="info-label">Nom complet</div>
+                        <div class="info-value" id="profile-name">-</div>
+                    </div>
+                    <div class="info-group">
+                        <div class="info-label">Email</div>
+                        <div class="info-value" id="profile-email">-</div>
+                    </div>
+                    <div class="info-group">
+                        <div class="info-label">Membre depuis</div>
+                        <div class="info-value" id="profile-since">-</div>
+                    </div>
+                    <button class="edit-btn" onclick="alert('Fonctionnalité à venir')"><i class="fas fa-edit"></i> Modifier mes informations</button>
+                </div>
+                
+                <div id="orders-tab" style="display: none;">
+                    <h2 class="section-title">Mes commandes</h2>
+                    <div id="orders-list">
+                        <div class="loading"><i class="fas fa-spinner fa-spin"></i> Chargement...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="https://wa.me/22892984983" class="whatsapp" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script>
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        
+        function updateCartCount() {
+            const count = cart.reduce((sum, item) => sum + item.quantite, 0);
+            const cartCount = document.getElementById('cart-count');
+            if (cartCount) cartCount.textContent = count;
+        }
+        
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+        
+        function checkAuth() {
+            fetch('/check-session')
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.connected) {
+                        window.location.href = '/login-page';
+                    } else {
+                        document.getElementById('user-name').textContent = data.nom || 'Client';
+                        document.getElementById('user-email').textContent = data.email || '';
+                        document.getElementById('profile-name').textContent = data.nom || '-';
+                        document.getElementById('profile-email').textContent = data.email || '-';
+                        loadOrders();
+                    }
+                })
+                .catch(() => {
+                    window.location.href = '/login-page';
+                });
+        }
+        
+        function loadOrders() {
+            fetch('/mes-commandes-api')
+                .then(res => res.json())
+                .then(orders => {
+                    const container = document.getElementById('orders-list');
+                    if (orders.length === 0) {
+                        container.innerHTML = '<div class="empty-orders"><i class="fas fa-box-open"></i><p>Aucune commande pour le moment</p><a href="/tous-les-produits" class="btn" style="display: inline-block; margin-top: 15px;">Commencer mes achats</a></div>';
+                        return;
+                    }
+                    
+                    container.innerHTML = '';
+                    orders.forEach(order => {
+                        const statusClass = `status-${order.statut}`;
+                        const statusText = {
+                            'en_attente': 'En attente',
+                            'confirmee': 'Confirmée',
+                            'livree': 'Livrée'
+                        }[order.statut] || order.statut;
+                        
+                        container.innerHTML += `
+                            <div class="order-item">
+                                <div class="order-header">
+                                    <span class="order-id">Commande #${order.id}</span>
+                                    <span class="order-status ${statusClass}">${statusText}</span>
+                                </div>
+                                <div class="order-header">
+                                    <span>Date: ${new Date(order.date).toLocaleDateString('fr-FR')}</span>
+                                    <span class="order-total">${order.total.toLocaleString()} FCFA</span>
+                                </div>
+                            </div>
+                        `;
+                    });
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    document.getElementById('orders-list').innerHTML = '<div class="empty-orders">Erreur de chargement</div>';
+                });
+        }
+        
+        function logout() {
+            fetch('/logout', { method: 'POST' })
+                .then(() => {
+                    localStorage.removeItem('cart');
+                    localStorage.removeItem('connected');
+                    localStorage.removeItem('user_nom');
+                    window.location.href = '/';
+                });
+        }
+        
+        // Tab switching
+        document.querySelectorAll('.sidebar-menu a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const tab = link.dataset.tab;
+                
+                document.querySelectorAll('.sidebar-menu a').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                
+                document.getElementById('info-tab').style.display = tab === 'info' ? 'block' : 'none';
+                document.getElementById('orders-tab').style.display = tab === 'orders' ? 'block' : 'none';
+            });
+        });
+        
+        document.getElementById('logout-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            logout();
+        });
+        
+        updateCartCount();
+        checkAuth();
+    </script>
+</body>
+</html>
