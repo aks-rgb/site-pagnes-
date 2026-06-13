@@ -652,11 +652,22 @@
                 text-align: center;
             }
             
-            .view-all-btn {
-                width: 100%;
-                text-align: center;
-                justify-content: center;
-            }
+             /* ===== STYLE DU BOUTON "VOIR TOUS" ===== */
+        .view-all-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            padding: clamp(0.6rem, 2.5vw, 0.8rem) clamp(1.2rem, 4vw, 1.8rem);
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            font-size: clamp(0.875rem, 3vw, 1rem);
+            white-space: nowrap;
+        }
             
             .filters {
                 flex-direction: column;
